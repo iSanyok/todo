@@ -5,8 +5,18 @@ $('.close').on('click', function () {
     $('.alert').hide();
 });
 $('.btn-add').on('click', function () {
-    $('.info').show(500);
+    if($(this).hasClass('btn-add') && $(this).hasClass('btn-success')) {
+
+        $('.info').show(500);
+        $(this).addClass('btn-cancel').addClass('btn-danger').removeClass('btn-add').removeClass('btn-success');
+        $(this).text('-');
+    } else {
+
+        $('.info').hide(500);
+        $(this).addClass('btn-add').addClass('btn-success').removeClass('btn-cancel').removeClass('btn-danger');
+        $(this).text('+');
+    }
 });
-$('.btn-cancel').on('click', function () {
-    $('.info').hide(500);
+$('#submit_form').on('click', function () {
+    $('#date').val($('#datepicker').val());
 });

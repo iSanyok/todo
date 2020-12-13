@@ -11,7 +11,9 @@ class Post extends Model
 
     protected $fillable = [
         'user_id',
+        'date',
         'title',
         'body',
     ];
+    protected $dateFormat = 'Y-m-d';
 }
