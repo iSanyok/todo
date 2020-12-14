@@ -2,7 +2,11 @@
     <x-slot name="header">
         <div class="container">
             <h1>Дата</h1>
-            <input class="date form-control" type="text" style="width: 200px" id="datepicker">
+            <form method="GET" action="{{ route('dashboard') }}" id="date_form">
+                @csrf
+                <input class="date form-control" type="text" style="width: 200px" id="datepicker" value="{{ $date }}"
+                       name="date">
+            </form>
         </div>
     </x-slot>
 
@@ -21,7 +25,8 @@
                     @forelse($posts as $post)
                         <div style="border-bottom: solid 1px darkgrey; margin-top: 1.5em">
                             @if($post->is_completed)
-                                <label style="margin-bottom: -1px; color: #1e7e34; text-decoration: line-through">{{ $post->body }}</label>
+                                <label
+                                    style="margin-bottom: -1px; color: #1e7e34; text-decoration: line-through">{{ $post->body }}</label>
                             @else
                                 <label style="margin-bottom: -1px">{{ $post->body }}</label>
                             @endif
@@ -51,12 +56,16 @@
                     <div class="info" style="display: none">
                         <form method="POST" action="{{route('add')}}" id="form" style="margin-top: 2em">
                             @csrf
-                            <input type="text" name="content">
+                            <div class="input-group mb-3">
+                                <input type="text" class="form-control" placeholder="Чем собираетесь заняться?"
+                                       aria-label="Recipient's username" aria-describedby="submit_form" name="content">
+                                <button class="btn btn-success" type="submit" id="submit_form">добавить
+                                </button>
+                            </div>
                             <input type="text" name="date" id="date" hidden>
-                            <button type="submit" class="btn btn-success" id="submit_form">добавить</button>
                         </form>
                     </div>
-                    <button class="btn btn-add btn-success" style="margin-top: 2em; border-radius: 50%">+</button>
+                    <button class="btn btn-add btn-outline-secondary" style="margin-top: 2em; border-radius: 50%; margin-left: 45%">+</button>
                 </div>
             </div>
         </div>

@@ -9,11 +9,17 @@ use Illuminate\Support\Facades\Auth;
 
 class PostController extends Controller
 {
-    public function index()
+    public function index($date = null)
     {
-        $posts = Post::where('user_id', Auth::user()->id)->orderBy('is_completed', 'DESC')->get();
+        $date = Carbon::parse(\request('date'))->format('yy-m-d');
 
-        return view('dashboard', ['posts' => $posts]);
+        $posts = Post::where([
+            ['user_id', Auth::user()->id],
+            ['date', $date ?? $date = Carbon::now()->toDateString()],
+        ])->orderBy('is_completed', 'DESC')->get();
+
+        return view('dashboard',
+            ['posts' => $posts, 'date' => Carbon::parse($date)->format('d.m.yy')]);
     }
 
     public function create(Request $request)
@@ -23,12 +29,10 @@ class PostController extends Controller
             'date' => 'required',
         ]);
 
-        $data['date'] = Carbon::parse($data['date'])->format('Y-m-d');
-
         $post = new Post();
 
         $post->body = $data['content'];
-        $post->date = $data['date'];
+        $post->date = Carbon::parse($data['date'])->format('yy-m-d');
         $post->user_id = Auth::user()->id;
 
         $post->save();
@@ -44,7 +48,7 @@ class PostController extends Controller
 
         $post->save();
 
-        return $this->index();
+        return redirect()->back()->with('success', 'Событие выполнено!');
     }
 
     public function update($id)
