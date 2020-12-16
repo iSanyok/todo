@@ -24,7 +24,7 @@
 @if (Route::has('login'))
     <div style="margin-left: 43%; margin-top: 1em">
         @auth
-            <a href="{{ url('/dashboard') }}">Dashboard</a>
+            <script>window.location = "/dashboard";</script>
         @else
             <a href="{{ route('login') }}">
                 <x-button class="ml-3">Войти</x-button>

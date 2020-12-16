@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Post;
 use Carbon\Carbon;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -22,16 +23,16 @@ class PostController extends Controller
             ['posts' => $posts, 'date' => Carbon::parse($date)->format('d.m.yy')]);
     }
 
-    public function create(Request $request)
+    public function create(Request $request): RedirectResponse
     {
         $data = $request->validate([
-            'content' => 'required',
+            'body' => 'required',
             'date' => 'required',
         ]);
 
         $post = new Post();
 
-        $post->body = $data['content'];
+        $post->body = $data['body'];
         $post->date = Carbon::parse($data['date'])->format('yy-m-d');
         $post->user_id = Auth::user()->id;
 
@@ -40,7 +41,7 @@ class PostController extends Controller
         return redirect()->back()->with('success', 'Событие успешно добоавлено!');
     }
 
-    public function complete($id)
+    public function complete($id): RedirectResponse
     {
         $post = Post::find($id);
 
@@ -51,16 +52,21 @@ class PostController extends Controller
         return redirect()->back()->with('success', 'Событие выполнено!');
     }
 
-    public function update($id)
+    public function update(Request $request, $id): RedirectResponse
     {
         $post = Post::find($id);
-        $post->body = 'changed';
+
+        $data = $request->validate([
+            'body' => 'required'
+        ]);
+
+        $post->body = $data['body'];
         $post->save();
 
         return redirect()->back()->with('success', 'Событие успешно изменено');
     }
 
-    public function destroy($id)
+    public function destroy($id): RedirectResponse
     {
         $post = Post::find($id);
         $post->delete();

@@ -1,11 +1,13 @@
 $('.date').datepicker({
     format: 'dd.mm.yyyy',
 }).on('change', function () {
-    $('#date_form').submit();
+    $('#date-form').submit();
 });
+
 $('.close').on('click', function () {
     $('.alert').hide();
 });
+
 $('.btn-add').on('click', function () {
     if ($(this).hasClass('btn-add')) {
 
@@ -19,6 +21,22 @@ $('.btn-add').on('click', function () {
         $(this).text('+');
     }
 });
-$('#submit_form').on('click', function () {
+
+$('#create-form').on('click', function () {
     $('#date').val($('#datepicker').val());
+});
+
+$('.update-button').on('click', function () {
+
+    let formClass = '.update-form' + $(this).attr('id');
+
+    if ($(this).hasClass('update-form-closed')) {
+
+        $(formClass).show(500);
+        $(this).removeClass('update-form-closed');
+    } else {
+
+        $(formClass).hide(500);
+        $(this).addClass('update-form-closed');
+    }
 });

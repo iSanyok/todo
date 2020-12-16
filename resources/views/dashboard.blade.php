@@ -2,7 +2,7 @@
     <x-slot name="header">
         <div class="container">
             <h1>Дата</h1>
-            <form method="GET" action="{{ route('dashboard') }}" id="date_form">
+            <form method="GET" action="{{ route('dashboard') }}" id="date-form">
                 @csrf
                 <input class="date form-control" type="text" style="width: 200px" id="datepicker" value="{{ $date }}"
                        name="date">
@@ -36,36 +36,56 @@
                                 @method('DELETE')
                                 <button type="submit" class="btn btn-danger">удалить</button>
                             </form>
-                            <form method="POST" action="{{ route('update', $post->id) }}"
-                                  style="margin-top: -15px; margin-right: 5px; vertical-align: bottom; float: right">
-                                @csrf
-                                @method('PUT')
-                                <button type="submit" class="btn btn-warning">редактировать</button>
-                            </form>
+
+                            <button type="submit" class="btn btn-warning update-form-closed update-button"
+                                    style="margin-top: -15px; margin-right: 5px;
+                                         vertical-align: bottom; float: right" id="{{ $post->id }}">редактировать
+                            </button>
+
                             <form method="POST" action="{{ route('complete', $post->id) }}"
                                   style="margin-top: -15px; margin-right: 5px; vertical-align: bottom; float: right">
                                 @csrf
                                 <button type="submit" class="btn btn-success">выполнено!</button>
                             </form>
+
                         </div>
+                            <div class="update-form{{ $post->id }}" style="display: none">
+                                <form method="POST" action="{{ route('update', ['id' => $post->id]) }}"
+                                      style="margin-top: 2em">
+                                    @csrf
+                                    @method('PUT')
+                                    <div class="input-group mb-3" style="margin-top: 1em; margin-bottom: 1em;"
+                                         id="update-form">
+                                        <input type="text" class="form-control" value="{{ $post->body }}"
+                                               aria-label="Recipient's username" aria-describedby="update-form"
+                                               name="body">
+                                        <button class="btn btn-success" type="submit" id="update-form">сохранить
+                                        </button>
+                                    </div>
+                                </form>
+                            </div>
                     @empty
                         <div>
                             <label>Нет записей</label>
                         </div>
                     @endforelse
+
                     <div class="info" style="display: none">
                         <form method="POST" action="{{route('add')}}" id="form" style="margin-top: 2em">
                             @csrf
                             <div class="input-group mb-3">
                                 <input type="text" class="form-control" placeholder="Чем собираетесь заняться?"
-                                       aria-label="Recipient's username" aria-describedby="submit_form" name="content">
-                                <button class="btn btn-success" type="submit" id="submit_form">добавить
+                                       aria-label="Recipient's username" aria-describedby="create_form" name="body">
+                                <button class="btn btn-success" type="submit" id="create-form">добавить
                                 </button>
                             </div>
                             <input type="text" name="date" id="date" hidden>
                         </form>
                     </div>
-                    <button class="btn btn-add btn-outline-secondary" style="margin-top: 2em; border-radius: 50%; margin-left: 45%">+</button>
+
+                    <button class="btn btn-add btn-outline-secondary"
+                            style="margin-top: 2em; border-radius: 50%; margin-left: 45%">+
+                    </button>
                 </div>
             </div>
         </div>
